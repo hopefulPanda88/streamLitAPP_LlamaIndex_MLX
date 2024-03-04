@@ -27,7 +27,7 @@ pip install -r requirement.txt
 The models(both llm and embedding model) can be define in the [config file](./config/model.yaml). 
 Follow the format, 
 but some code for dealing with model hyper parameters is still to be added. The model 
-path can be both from Huggingface repo and your local location.
+path can be either from Huggingface repo or your local location.
 
 ### [Trubrics]( https://trubrics.streamlit.app/)
 ![feedback](feedback.png)
