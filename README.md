@@ -37,8 +37,8 @@ it is worth to mention that Trubrics won't work in environment without internet 
 
 ### Future work
 
--[ ] more RAG method will be added
--[ ] probably a new UI. Sorry, the current UI is so ugly and the control flow seems a little weird,
+- [ ] more RAG method will be added
+- [ ] probably a new UI. Sorry, the current UI is so ugly and the control flow seems a little weird,
 partly because of my terrible understanding of streamLit.
 - [ ] The feedback part is still under improvement for it dosen't work well, sometimes it will drag down 
 the performance of the APP and sometimes it will crash due to request exception...
