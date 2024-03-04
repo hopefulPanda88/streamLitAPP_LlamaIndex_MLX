@@ -1,0 +1,22 @@
+models:
+  Mistral_7B:
+    path: /Users/yn/Downloads/models/mistral7BinstructV02-mlx
+    model_kwargs: {}
+    tokenizer_kwargs: {}
+  Yi-6B:
+    path: /Users/yn/Downloads/models/yi6B
+    model_kwargs: {}
+    tokenizer_kwargs: {}
+  Qwen1.5-7B:
+    path: TBD
+    model_kwargs: { }
+    tokenizer_kwargs: { }
+  Qwen1.5-14B:
+    path: TBD
+    model_kwargs: { }
+    tokenizer_kwargs: { }
+
+embedding_models:
+  UAELarge:
+    path: /Users/yn/Downloads/models/UAELarge
+    kwargs: {}
