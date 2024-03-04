@@ -21,7 +21,12 @@ packages of Llama index to accelerate development.
 ```python
 pip install -r requirement.txt
 ```
+after setting the parameters in "/.streamlit/secrets.toml" and "./config/model.yaml":
 
+```python
+streamlit run main_user_feedback.py
+```
+here we go.
 ### Models
 
 The models(both llm and embedding model) can be define in the [config file](./config/model.yaml). 
