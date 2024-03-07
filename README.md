@@ -29,9 +29,9 @@ streamlit run main_user_feedback.py
 here we go.
 ### Models
 
-The models(both llm and embedding model) can be define in the [config file](./config/model.yaml). 
+The models(both llm and embedding model) can be defined in the [config file](./config/model.yaml). 
 Follow the format, 
-but some code for dealing with model hyper parameters is still to be added. The model 
+but some code for dealing with model hyperparameters is still to be added. The model 
 path can be either from Huggingface repo or your local location.
 
 ### [Trubrics]( https://trubrics.streamlit.app/)
@@ -45,8 +45,8 @@ it is worth to mention that Trubrics won't work in environment without internet 
 - [ ] more RAG method will be added
 - [ ] probably a new UI. Sorry, the current UI is so ugly and the control flow seems a little weird,
 partly because of my terrible understanding of streamLit.
-- [ ] The feedback part is still under improvement for it dosen't work well, sometimes it will drag down 
-the performance of the APP and sometimes it will crash due to request exception...
+- [ ] The feedback part is still under improvement for it doesn't work well, sometimes it will drag down 
+the performance of the APP, sometimes it will crash due to request exception...
 
 In the end, thanks to the Apple's machine learning team for the powerful tool MLX and its tool family.
 It provides more potentials for personal application developer.
