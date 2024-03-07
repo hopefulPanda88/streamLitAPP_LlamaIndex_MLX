@@ -206,7 +206,8 @@ class LocalLLMOnMLX(CustomLLM):
         """model kwargs definitions"""
         self.temperature = 0.0
         if self.model_kwargs is not None:
-            self.temperature = self.model_kwargs.get("temp", False)
+            if self.model_kwargs.get("temp", False) is not False:
+                self.temperature = self.model_kwargs.get("temp")
 
         """setup stopping criteria"""
         stopping_ids_list = stopping_ids or []
