@@ -16,6 +16,7 @@ from llama_index.core.types import PydanticProgramMode, BaseOutputParser
 from mlx_lm import generate
 from typing import Any, List, Optional, Callable, Sequence, Union
 
+from utils.models.generate_other_types import generate as special_generate
 
 from llama_index.core import PromptTemplate
 
@@ -23,7 +24,7 @@ from mlx_lm import load
 from mlx_lm.utils import generate_step
 from pydantic import Field, PrivateAttr
 
-from utils.file import read_json_file
+from utils.tools.file import read_json_file
 
 
 class LocalLLMOnMLX(CustomLLM):
@@ -53,6 +54,12 @@ class LocalLLMOnMLX(CustomLLM):
         default=256,
         description="The maximum number of tokens to generate.",
         gt=0,
+    )
+    temperature: float = Field(
+        default=0.0,
+        description="model temperature",
+        ge=0.0,
+        le=1.0
     )
     system_prompt: str = Field(
         default="",
@@ -204,10 +211,11 @@ class LocalLLMOnMLX(CustomLLM):
             context_window = model_context_window
 
         """model kwargs definitions"""
-        self.temperature = 0.0
-        if self.model_kwargs is not None:
-            if self.model_kwargs.get("temp", False) is not False:
-                self.temperature = self.model_kwargs.get("temp")
+
+        # self.temperature = 0.0
+        # if self.model_kwargs is not None:
+        #     if self.model_kwargs.get("temp", False) is not False:
+        #         self.temperature = self.model_kwargs.get("temp")
 
         """setup stopping criteria"""
         stopping_ids_list = stopping_ids or []
