@@ -41,7 +41,7 @@ it is worth to mention that Trubrics won't work in environment without internet 
 **some places without access to google's products** :dog:.
 
 ### Future work
-
+- [ ] Agent application examples
 - [ ] more RAG method will be added
 - [ ] probably a new UI. Sorry, the current UI is so ugly and the control flow seems a little weird,
 partly because of my terrible understanding of streamLit.
@@ -50,3 +50,8 @@ the performance of the APP and sometimes it will crash due to request exception.
 
 In the end, thanks to the Apple's machine learning team for the powerful tool MLX and its tool family.
 It provides more potentials for personal application developer.
+
+### Update
+- [x] Update LocalLLMOnMLX class with
+- able to accept self-define chat template of tokenizer;
+- able to self-define the temperature of the model;

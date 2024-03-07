@@ -16,6 +16,7 @@ from llama_index.core.types import PydanticProgramMode, BaseOutputParser
 from mlx_lm import generate
 from typing import Any, List, Optional, Callable, Sequence, Union
 
+
 from llama_index.core import PromptTemplate
 
 from mlx_lm import load
@@ -27,8 +28,7 @@ from utils.file import read_json_file
 
 class LocalLLMOnMLX(CustomLLM):
     """
-    A custom class to load any local LLM to MLX and conduct predication. The original models are from HuggingFace for
-    now despite being modified to adapt to the practical situation.
+    A custom class to load any local LLM using MLX and conduct predication.
     """
     model_name: str = Field(
         # default = ""
@@ -127,6 +127,7 @@ class LocalLLMOnMLX(CustomLLM):
             query_wrapper_prompt: Union[str, PromptTemplate] = "{query_str}",
             model: Optional[Any] = None,
             tokenizer: Optional[Any] = None,
+            chat_template: Optional[str] = None,
             device_map: Optional[str] = "auto",
             stopping_ids: Optional[List[int]] = None,
             tokenizer_kwargs: Optional[dict] = None,
@@ -142,15 +143,16 @@ class LocalLLMOnMLX(CustomLLM):
             output_parser: Optional[BaseOutputParser] = None,
     ) -> None:
         """
-        initialize a local llm for use
+        class initiation
         Args:
             model_name:
             tokenizer_name:
-            context_window: maximum input length of the context
+            context_window:
             max_new_tokens:
             query_wrapper_prompt:
-            model: could be a transformer llm class instance or a path pointing to a local folder containing model files
+            model:
             tokenizer:
+            chat_template: self-defined chat template for generation
             device_map:
             stopping_ids:
             tokenizer_kwargs:
@@ -176,7 +178,7 @@ class LocalLLMOnMLX(CustomLLM):
                 "Please install both with `pip install transformers[torch]`."
             ) from err
 
-        """Begin to load model and tokenizer using MLX. You can directly pass a mlx model"""
+        """Begin to load model and tokenizer using MLX. You can directly pass a mlx model instance"""
 
         if model or tokenizer is None:
             if tokenizer_kwargs is not None:
@@ -185,6 +187,10 @@ class LocalLLMOnMLX(CustomLLM):
                 self._model, self._tokenizer = load(model_name)
         else:
             self._model, self._tokenizer = model, tokenizer
+
+        # set my own chat template for testing on mistral AI model
+        if chat_template is not None:
+            self._tokenizer.chat_template = chat_template
 
         # check context_window and make sure its value is not missing and valid.
         config_dict = read_json_file(os.path.join(model_name, "config.json"))
@@ -196,6 +202,11 @@ class LocalLLMOnMLX(CustomLLM):
             warnings.warn(f"Supplied context window: {context_window} exceeds the maximum length of the model, "
                           f"so it will be reset to {model_context_window}")
             context_window = model_context_window
+
+        """model kwargs definitions"""
+        self.temperature = 0.0
+        if self.model_kwargs is not None:
+            self.temperature = self.model_kwargs.get("temp", False)
 
         """setup stopping criteria"""
         stopping_ids_list = stopping_ids or []
@@ -274,6 +285,7 @@ class LocalLLMOnMLX(CustomLLM):
 
         completion = generate(self._model, self._tokenizer,
                               full_prompt,
+                              temp=self.temperature,
                               max_tokens=self.max_new_tokens,
                               verbose=False)
         return CompletionResponse(text=completion)
@@ -292,7 +304,8 @@ class LocalLLMOnMLX(CustomLLM):
         encoded_prompt = mx.array(self._tokenizer.encode(full_prompt))
         tokens = []
         skip = 0
-        for (token, prob), _ in zip(generate_step(encoded_prompt, self._model), range(self.max_new_tokens)):
+        for (token, prob), _ in zip(generate_step(encoded_prompt, self._model, temp=self.temperature),
+                                    range(self.max_new_tokens)):
             if token == self._tokenizer.eos_token_id:
                 break
 
@@ -301,4 +314,3 @@ class LocalLLMOnMLX(CustomLLM):
             yield CompletionResponse(text=s[:skip], delta=s[skip:])
             # print(s[skip:], end="", flush=True)
             skip = len(s)
-
