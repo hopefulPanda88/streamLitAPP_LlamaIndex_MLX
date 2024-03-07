@@ -129,6 +129,7 @@ class LocalLLMOnMLX(CustomLLM):
             tokenizer_name: str,
             context_window: int = 3900,
             max_new_tokens: int = 256,
+            temperature: float = 0.0,
             query_wrapper_prompt: Union[str, PromptTemplate] = "{query_str}",
             model: Optional[Any] = None,
             tokenizer: Optional[Any] = None,
@@ -207,13 +208,6 @@ class LocalLLMOnMLX(CustomLLM):
             warnings.warn(f"Supplied context window: {context_window} exceeds the maximum length of the model, "
                           f"so it will be reset to {model_context_window}")
             context_window = model_context_window
-
-        """model kwargs definitions"""
-
-        # self.temperature = 0.0
-        # if self.model_kwargs is not None:
-        #     if self.model_kwargs.get("temp", False) is not False:
-        #         self.temperature = self.model_kwargs.get("temp")
 
         """setup stopping criteria"""
         stopping_ids_list = stopping_ids or []
