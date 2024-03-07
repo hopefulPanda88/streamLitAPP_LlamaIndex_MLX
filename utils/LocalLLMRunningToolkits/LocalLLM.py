@@ -16,15 +16,13 @@ from llama_index.core.types import PydanticProgramMode, BaseOutputParser
 from mlx_lm import generate
 from typing import Any, List, Optional, Callable, Sequence, Union
 
-from utils.models.generate_other_types import generate as special_generate
-
 from llama_index.core import PromptTemplate
 
 from mlx_lm import load
 from mlx_lm.utils import generate_step
 from pydantic import Field, PrivateAttr
 
-from utils.tools.file import read_json_file
+from utils.file import read_json_file
 
 
 class LocalLLMOnMLX(CustomLLM):
